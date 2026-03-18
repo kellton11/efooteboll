@@ -1,0 +1,1293 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>eFootball · Copa dos Amigos</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background: #0a0f0f;
+            color: #fff;
+            padding: 16px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: #00e676;
+            font-size: 2.2rem;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            color: #00e676;
+            font-size: 1.5rem;
+            border-left: 4px solid #00e676;
+            padding-left: 12px;
+            margin: 20px 0 15px;
+        }
+
+        h3 {
+            color: #b2cfcf;
+            margin: 15px 0 10px;
+        }
+
+        .card {
+            background: #1a2525;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid #2d3e3e;
+        }
+
+        button {
+            background: #2d3e3e;
+            border: none;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 40px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            border: 1px solid #3f5555;
+        }
+
+        button.primario {
+            background: #00e676;
+            color: #000;
+            border: none;
+        }
+
+        button.primario:hover {
+            background: #00c853;
+        }
+
+        button:hover {
+            background: #3f5555;
+        }
+
+        input {
+            background: #1a2525;
+            border: 1px solid #2d3e3e;
+            color: white;
+            padding: 12px 16px;
+            border-radius: 40px;
+            font-size: 1rem;
+            width: 100%;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #00e676;
+        }
+
+        .flex {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        /* Jogadores */
+        .jogadores-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .jogador-tag {
+            background: #00e676;
+            color: #000;
+            padding: 8px 16px;
+            border-radius: 40px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .remover {
+            background: none;
+            border: none;
+            color: #000;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        /* Times */
+        .times-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 8px;
+            max-height: 400px;
+            overflow-y: auto;
+            padding: 10px;
+            background: #0a0f0f;
+            border-radius: 20px;
+        }
+
+        .time-item {
+            background: #1a2525;
+            border: 1px solid #2d3e3e;
+            border-radius: 30px;
+            padding: 8px 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .time-item.selecionado {
+            background: #00c853;
+            color: #000;
+        }
+
+        .time-item input {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Sorteio */
+        .sorteio-opcional {
+            background: #0a2a2a;
+            border-radius: 20px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 2px dashed #00e676;
+        }
+
+        .toggle-sorteio {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .toggle-sorteio input {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Grupos */
+        .grupos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .grupo-card {
+            background: #0a0f0f;
+            border-radius: 20px;
+            padding: 15px;
+            border-left: 4px solid #00e676;
+        }
+
+        .tabela {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+            margin: 10px 0;
+        }
+
+        .tabela th {
+            background: #00c853;
+            color: #000;
+            padding: 6px;
+        }
+
+        .tabela td {
+            padding: 6px;
+            border-bottom: 1px solid #2d3e3e;
+        }
+
+        /* Jogos */
+        .jogo {
+            background: #1a2525;
+            border-radius: 40px;
+            padding: 12px;
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .jogo.jogado {
+            background: #1a3a3a;
+            border: 1px solid #00e676;
+        }
+
+        .placar-input {
+            width: 60px;
+            text-align: center;
+        }
+
+        .placar-fixo {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #00e676;
+            min-width: 80px;
+            text-align: center;
+        }
+
+        /* Mata-mata */
+        .fase-mata {
+            background: #0a0f0f;
+            border-radius: 20px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .chave {
+            background: #1a2525;
+            border-radius: 20px;
+            padding: 15px;
+            margin: 10px 0;
+        }
+
+        .confronto {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .placar-mata {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .placar-mata input {
+            width: 60px;
+            text-align: center;
+        }
+
+        .vencedor {
+            background: gold;
+            color: #000;
+            font-weight: 700;
+            padding: 8px 16px;
+            border-radius: 40px;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        /* Campeão */
+        .campeao-box {
+            background: linear-gradient(145deg, #1a3a1a, #0a2a0a);
+            border: 4px solid gold;
+            border-radius: 40px;
+            padding: 30px;
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .campeao-titulo {
+            color: gold;
+            font-size: 2rem;
+        }
+
+        .campeao-time {
+            color: #00e676;
+            font-size: 3rem;
+            font-weight: 800;
+            margin: 20px 0;
+        }
+
+        .campeao-data {
+            color: #b2cfcf;
+            font-size: 1.1rem;
+        }
+
+        /* Histórico de Campeões */
+        .historico-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .historico-item {
+            background: #0a0f0f;
+            border-radius: 20px;
+            padding: 15px;
+            border-left: 4px solid gold;
+            transition: 0.2s;
+        }
+
+        .historico-item:hover {
+            transform: translateY(-2px);
+            border-color: #00e676;
+        }
+
+        .historico-campeao {
+            color: gold;
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .historico-time {
+            color: #00e676;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        .historico-data {
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .badge-ouro {
+            background: gold;
+            color: #000;
+            padding: 4px 12px;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #00e676;
+            color: #000;
+            padding: 12px 24px;
+            border-radius: 40px;
+            font-weight: 600;
+            z-index: 1000;
+        }
+
+        .toast.erro {
+            background: #d32f2f;
+            color: white;
+        }
+
+        .abas {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #2d3e3e;
+            padding-bottom: 10px;
+        }
+
+        .aba {
+            padding: 10px 20px;
+            border-radius: 40px;
+            cursor: pointer;
+            background: #1a2525;
+        }
+
+        .aba.ativa {
+            background: #00e676;
+            color: #000;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏆 COPA DOS AMIGOS 🏆</h1>
+
+        <!-- ABAS: Campeonato Atual / Histórico -->
+        <div class="abas">
+            <div class="aba ativa" id="abaAtual" onclick="mudarAba('atual')">🏆 Campeonato Atual</div>
+            <div class="aba" id="abaHistorico" onclick="mudarAba('historico')">📜 Histórico de Campeões</div>
+        </div>
+
+        <!-- ÁREA DO CAMPEONATO ATUAL -->
+        <div id="areaAtual">
+            <!-- PASSO 1: JOGADORES -->
+            <div class="card">
+                <h2>👥 1. Quem vai jogar?</h2>
+                <div class="flex">
+                    <input type="text" id="inputJogador" placeholder="Nome do jogador">
+                    <button id="btnAddJogador" class="primario">Adicionar</button>
+                </div>
+                <div id="jogadoresList" class="jogadores-list"></div>
+            </div>
+
+            <!-- PASSO 2: TIMES -->
+            <div class="card">
+                <h2>⚽ 2. Escolha os 32 times</h2>
+                <div class="flex" style="margin-bottom: 15px;">
+                    <input type="text" id="buscaTime" placeholder="Buscar time...">
+                    <button id="btnAddTime">+ Criar time</button>
+                </div>
+                <div id="timesList" class="times-grid"></div>
+                <div style="display: flex; justify-content: space-between; margin-top: 15px;">
+                    <span id="contadorTimes">0/32 selecionados</span>
+                    <button id="btnCarregarPadrao">📋 Carregar 32 padrão</button>
+                </div>
+            </div>
+
+            <!-- PASSO 3: SORTEIO OPCIONAL -->
+            <div class="card" id="sorteioCard" style="display: none;">
+                <h2>🎲 3. Sorteio entre jogadores (opcional)</h2>
+                
+                <div class="toggle-sorteio">
+                    <input type="checkbox" id="chkSortear" checked>
+                    <label for="chkSortear">Sortear 1 time para cada jogador</label>
+                </div>
+
+                <button id="btnSortear" class="primario" style="width: 100%; padding: 20px; font-size: 1.3rem;">🎲 SORTEAR TIMES</button>
+
+                <div id="resultadoSorteio" style="margin-top: 20px;"></div>
+
+                <button id="btnIniciarCampeonato" class="primario" style="width: 100%; margin-top: 20px; padding: 15px;" disabled>
+                    🚀 INICIAR CAMPEONATO
+                </button>
+            </div>
+
+            <!-- CAMPEONATO -->
+            <div id="campeonatoArea" style="display: none;">
+                <!-- FASE DE GRUPOS -->
+                <div class="card">
+                    <h2>📊 FASE DE GRUPOS</h2>
+                    <div id="gruposContainer" class="grupos-grid"></div>
+                    <button id="btnAvancarMata" class="primario" style="width: 100%; margin-top: 20px; padding: 15px;">
+                        ⏩ AVANÇAR PARA MATA-MATA
+                    </button>
+                </div>
+
+                <!-- MATA-MATA -->
+                <div id="mataArea" style="display: none;">
+                    <div class="card">
+                        <h2>⚔️ OITAVAS DE FINAL</h2>
+                        <div id="oitavasContainer"></div>
+                    </div>
+
+                    <div class="card" id="quartasCard" style="display: none;">
+                        <h2>⚔️ QUARTAS DE FINAL</h2>
+                        <div id="quartasContainer"></div>
+                    </div>
+
+                    <div class="card" id="semisCard" style="display: none;">
+                        <h2>⚔️ SEMIFINAIS</h2>
+                        <div id="semisContainer"></div>
+                    </div>
+
+                    <div class="card" id="finalCard" style="display: none;">
+                        <h2>🏆 FINAL</h2>
+                        <div id="finalContainer"></div>
+                    </div>
+
+                    <div id="campeaoCard" style="display: none;" class="campeao-box">
+                        <div class="campeao-titulo">🏆 GRANDE CAMPEÃO 🏆</div>
+                        <div id="campeaoTime" class="campeao-time"></div>
+                        <div id="campeaoJogador" class="campeao-data"></div>
+                        <button id="btnRegistrarCampeao" class="primario" style="margin-top: 20px;">📝 Registrar no Histórico</button>
+                    </div>
+                </div>
+
+                <!-- RANKING (se tiver sorteio) -->
+                <div class="card" id="rankingCard" style="display: none;">
+                    <h2>📈 RANKING DOS JOGADORES</h2>
+                    <div id="rankingContainer"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ÁREA DO HISTÓRICO -->
+        <div id="areaHistorico" style="display: none;">
+            <div class="card">
+                <h2>📜 HISTÓRICO DE CAMPEÕES</h2>
+                <div id="historicoContainer" class="historico-grid"></div>
+                <button id="btnLimparHistorico" style="margin-top: 20px; background: #d32f2f;">🗑️ Limpar Histórico</button>
+            </div>
+        </div>
+
+        <!-- CONTROLES -->
+        <div style="display: flex; gap: 10px; justify-content: center; margin-top: 30px;">
+            <button id="btnSalvar">💾 Salvar</button>
+            <button id="btnCarregar">📂 Carregar</button>
+            <button id="btnNovoCampeonato">🆕 Novo Campeonato</button>
+        </div>
+    </div>
+
+    <script>
+        // Times padrão
+        const TIMES_PADRAO = [
+            "Flamengo", "Palmeiras", "São Paulo", "Corinthians", "Santos", "Grêmio",
+            "Internacional", "Cruzeiro", "Atlético-MG", "Botafogo", "Fluminense", "Vasco",
+            "Bahia", "Athletico-PR", "Coritiba", "Fortaleza", "Ceará", "Sport",
+            "Barcelona", "Real Madrid", "Bayern", "Manchester City", "Liverpool",
+            "PSG", "Juventus", "Milan", "Ajax", "Porto", "Benfica", "Boca Juniors",
+            "River Plate", "Napoli", "Chelsea", "Arsenal", "Tottenham", "Atlético de Madrid",
+            "Sevilla", "Borussia Dortmund", "Leverkusen", "Roma", "Lazio", "Fiorentina"
+        ];
+
+        // Histórico de campeões (guardado separadamente)
+        let historicoCampeoes = JSON.parse(localStorage.getItem('historico_campeoes')) || [];
+
+        // Estado do campeonato atual
+        let jogadores = [];
+        let timesSelecionados = [];
+        let timesPersonalizados = [];
+        let sorteioRealizado = false;
+        let jogadorTimes = [];
+        let grupos = [];
+        let chaves = { oitavas: [], quartas: [], semis: [], final: [] };
+        let estatisticas = {};
+        let faseAtual = 'grupos';
+        let campeaoAtual = null;
+
+        // Elementos
+        const inputJogador = document.getElementById('inputJogador');
+        const btnAddJogador = document.getElementById('btnAddJogador');
+        const jogadoresList = document.getElementById('jogadoresList');
+        const buscaTime = document.getElementById('buscaTime');
+        const btnAddTime = document.getElementById('btnAddTime');
+        const timesList = document.getElementById('timesList');
+        const contadorTimes = document.getElementById('contadorTimes');
+        const btnCarregarPadrao = document.getElementById('btnCarregarPadrao');
+        const sorteioCard = document.getElementById('sorteioCard');
+        const chkSortear = document.getElementById('chkSortear');
+        const btnSortear = document.getElementById('btnSortear');
+        const resultadoSorteio = document.getElementById('resultadoSorteio');
+        const btnIniciarCampeonato = document.getElementById('btnIniciarCampeonato');
+        const campeonatoArea = document.getElementById('campeonatoArea');
+        const gruposContainer = document.getElementById('gruposContainer');
+        const btnAvancarMata = document.getElementById('btnAvancarMata');
+        const mataArea = document.getElementById('mataArea');
+        const oitavasContainer = document.getElementById('oitavasContainer');
+        const quartasCard = document.getElementById('quartasCard');
+        const quartasContainer = document.getElementById('quartasContainer');
+        const semisCard = document.getElementById('semisCard');
+        const semisContainer = document.getElementById('semisContainer');
+        const finalCard = document.getElementById('finalCard');
+        const finalContainer = document.getElementById('finalContainer');
+        const campeaoCard = document.getElementById('campeaoCard');
+        const campeaoTime = document.getElementById('campeaoTime');
+        const campeaoJogador = document.getElementById('campeaoJogador');
+        const btnRegistrarCampeao = document.getElementById('btnRegistrarCampeao');
+        const rankingCard = document.getElementById('rankingCard');
+        const rankingContainer = document.getElementById('rankingContainer');
+        const btnSalvar = document.getElementById('btnSalvar');
+        const btnCarregar = document.getElementById('btnCarregar');
+        const btnNovoCampeonato = document.getElementById('btnNovoCampeonato');
+        const areaAtual = document.getElementById('areaAtual');
+        const areaHistorico = document.getElementById('areaHistorico');
+        const abaAtual = document.getElementById('abaAtual');
+        const abaHistorico = document.getElementById('abaHistorico');
+        const historicoContainer = document.getElementById('historicoContainer');
+        const btnLimparHistorico = document.getElementById('btnLimparHistorico');
+
+        // Mostrar mensagem
+        function mostrarMensagem(texto, erro = false) {
+            const toast = document.createElement('div');
+            toast.className = `toast ${erro ? 'erro' : ''}`;
+            toast.textContent = texto;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 2000);
+        }
+
+        // Mudar entre abas
+        window.mudarAba = (aba) => {
+            if (aba === 'atual') {
+                areaAtual.style.display = 'block';
+                areaHistorico.style.display = 'none';
+                abaAtual.classList.add('ativa');
+                abaHistorico.classList.remove('ativa');
+            } else {
+                areaAtual.style.display = 'none';
+                areaHistorico.style.display = 'block';
+                abaHistorico.classList.add('ativa');
+                abaAtual.classList.remove('ativa');
+                renderHistorico();
+            }
+        };
+
+        // Renderizar histórico
+        function renderHistorico() {
+            if (historicoCampeoes.length === 0) {
+                historicoContainer.innerHTML = '<p style="color: gray; text-align: center;">Nenhum campeão registrado ainda.</p>';
+                return;
+            }
+
+            let html = '';
+            historicoCampeoes.sort((a, b) => new Date(b.data) - new Date(a.data)).forEach(campeao => {
+                const data = new Date(campeao.data);
+                const dataStr = data.toLocaleDateString('pt-BR');
+                
+                html += `
+                    <div class="historico-item">
+                        <div class="historico-campeao">🏆 ${campeao.campeao}</div>
+                        <div class="historico-time">⚽ ${campeao.time}</div>
+                        <div class="historico-data">📅 ${dataStr}</div>
+                        ${campeao.jogador ? `<span class="badge-ouro">👤 ${campeao.jogador}</span>` : ''}
+                    </div>
+                `;
+            });
+            
+            historicoContainer.innerHTML = html;
+        }
+
+        // Adicionar campeão ao histórico
+        function adicionarCampeaoHistorico(campeao, time, jogador = null) {
+            const novoCampeao = {
+                campeao,
+                time,
+                jogador,
+                data: new Date().toISOString()
+            };
+            
+            historicoCampeoes.push(novoCampeao);
+            localStorage.setItem('historico_campeoes', JSON.stringify(historicoCampeoes));
+            mostrarMensagem('✅ Campeão registrado no histórico!');
+            renderHistorico();
+        }
+
+        // Limpar histórico
+        btnLimparHistorico.addEventListener('click', () => {
+            if (confirm('Tem certeza? Isso apagará todo o histórico de campeões.')) {
+                historicoCampeoes = [];
+                localStorage.setItem('historico_campeoes', JSON.stringify(historicoCampeoes));
+                renderHistorico();
+                mostrarMensagem('Histórico limpo!');
+            }
+        });
+
+        // Renderizar jogadores
+        function renderJogadores() {
+            if (jogadores.length === 0) {
+                jogadoresList.innerHTML = '<p style="color: gray;">Nenhum jogador adicionado</p>';
+                return;
+            }
+
+            let html = '';
+            jogadores.forEach((j, i) => {
+                html += `
+                    <div class="jogador-tag">
+                        👤 ${j}
+                        <button class="remover" onclick="removerJogador(${i})">✕</button>
+                    </div>
+                `;
+            });
+            jogadoresList.innerHTML = html;
+        }
+
+        window.removerJogador = (i) => {
+            jogadores.splice(i, 1);
+            renderJogadores();
+            verificarSorteio();
+        };
+
+        btnAddJogador.addEventListener('click', () => {
+            const nome = inputJogador.value.trim();
+            if (!nome) return mostrarMensagem('Digite um nome', true);
+            if (jogadores.includes(nome)) return mostrarMensagem('Jogador já existe', true);
+            
+            jogadores.push(nome);
+            inputJogador.value = '';
+            renderJogadores();
+            verificarSorteio();
+        });
+
+        // Renderizar times
+        function renderTimes() {
+            const termo = buscaTime.value.toLowerCase();
+            const todosTimes = [...new Set([...TIMES_PADRAO, ...timesPersonalizados])].sort();
+            
+            let html = '';
+            todosTimes.forEach(time => {
+                if (termo && !time.toLowerCase().includes(termo)) return;
+                
+                const selecionado = timesSelecionados.includes(time);
+                const personalizado = timesPersonalizados.includes(time);
+                
+                html += `
+                    <div class="time-item ${selecionado ? 'selecionado' : ''}" onclick="toggleTime('${time}')">
+                        <input type="checkbox" ${selecionado ? 'checked' : ''} readonly>
+                        <span>${personalizado ? '🆕' : '⚽'} ${time}</span>
+                        ${personalizado ? `<span style="margin-left: auto; color: #ff6b6b; cursor: pointer;" onclick="removerTime('${time}')">✕</span>` : ''}
+                    </div>
+                `;
+            });
+            
+            timesList.innerHTML = html;
+            contadorTimes.textContent = `${timesSelecionados.length}/32 selecionados`;
+        }
+
+        window.toggleTime = (time) => {
+            if (timesSelecionados.includes(time)) {
+                timesSelecionados = timesSelecionados.filter(t => t !== time);
+            } else {
+                if (timesSelecionados.length >= 32) {
+                    return mostrarMensagem('Máximo 32 times!', true);
+                }
+                timesSelecionados.push(time);
+            }
+            renderTimes();
+            verificarSorteio();
+        };
+
+        window.removerTime = (time) => {
+            timesPersonalizados = timesPersonalizados.filter(t => t !== time);
+            timesSelecionados = timesSelecionados.filter(t => t !== time);
+            renderTimes();
+            mostrarMensagem('Time removido');
+        };
+
+        btnAddTime.addEventListener('click', () => {
+            const time = prompt('Nome do time:');
+            if (!time) return;
+            
+            if ([...TIMES_PADRAO, ...timesPersonalizados].includes(time)) {
+                return mostrarMensagem('Time já existe', true);
+            }
+            
+            timesPersonalizados.push(time);
+            renderTimes();
+        });
+
+        btnCarregarPadrao.addEventListener('click', () => {
+            timesSelecionados = [...TIMES_PADRAO].slice(0, 32);
+            renderTimes();
+            verificarSorteio();
+            mostrarMensagem('32 times carregados!');
+        });
+
+        buscaTime.addEventListener('input', renderTimes);
+
+        // Verificar se pode mostrar sorteio
+        function verificarSorteio() {
+            if (jogadores.length > 0 && timesSelecionados.length === 32) {
+                sorteioCard.style.display = 'block';
+            } else {
+                sorteioCard.style.display = 'none';
+            }
+        }
+
+        // Sortear
+        btnSortear.addEventListener('click', () => {
+            if (!chkSortear.checked) {
+                resultadoSorteio.innerHTML = '<p style="color: #00e676;">✅ Sorteio pulado. Nenhum time vinculado a jogadores.</p>';
+                btnIniciarCampeonato.disabled = false;
+                rankingCard.style.display = 'none';
+                return;
+            }
+
+            if (jogadores.length === 0) {
+                return mostrarMensagem('Adicione jogadores primeiro', true);
+            }
+
+            btnSortear.textContent = '🎲 SORTEANDO...';
+            btnSortear.disabled = true;
+
+            setTimeout(() => {
+                const timesEmbaralhados = [...timesSelecionados].sort(() => Math.random() - 0.5);
+                jogadorTimes = [];
+                
+                for (let i = 0; i < jogadores.length; i++) {
+                    jogadorTimes.push({
+                        jogador: jogadores[i],
+                        time: timesEmbaralhados[i % timesSelecionados.length]
+                    });
+                }
+
+                let html = '<h3>🎲 Times sorteados:</h3>';
+                jogadorTimes.forEach(item => {
+                    html += `
+                        <div style="background: #0a0f0f; border-radius: 40px; padding: 12px 20px; margin: 8px 0; display: flex; justify-content: space-between;">
+                            <span style="color: #00e676; font-weight: 700;">${item.jogador}</span>
+                            <span style="font-weight: 600;">⚽ ${item.time}</span>
+                        </div>
+                    `;
+                });
+                
+                resultadoSorteio.innerHTML = html;
+                btnSortear.textContent = '🎲 SORTEAR TIMES';
+                btnSortear.disabled = false;
+                btnIniciarCampeonato.disabled = false;
+                rankingCard.style.display = 'block';
+                mostrarMensagem('✅ Times sorteados!');
+            }, 500);
+        });
+
+        // Iniciar campeonato
+        btnIniciarCampeonato.addEventListener('click', () => {
+            timesSelecionados.forEach(time => {
+                estatisticas[time] = { pontos: 0, jogos: 0, vitorias: 0, empates: 0, derrotas: 0, golsPro: 0, golsContra: 0 };
+            });
+
+            const timesEmbaralhados = [...timesSelecionados].sort(() => Math.random() - 0.5);
+            grupos = [];
+            
+            for (let i = 0; i < 8; i++) {
+                const timesGrupo = timesEmbaralhados.slice(i * 4, i * 4 + 4);
+                grupos.push({
+                    nome: String.fromCharCode(65 + i),
+                    times: timesGrupo,
+                    classificacao: timesGrupo.map(time => ({
+                        time,
+                        pontos: 0,
+                        jogos: 0,
+                        vitorias: 0,
+                        empates: 0,
+                        derrotas: 0,
+                        golsPro: 0,
+                        golsContra: 0
+                    })),
+                    jogos: gerarJogos(timesGrupo)
+                });
+            }
+
+            campeonatoArea.style.display = 'block';
+            renderGrupos();
+            
+            if (jogadorTimes.length > 0) {
+                renderRanking();
+            }
+        });
+
+        function gerarJogos(times) {
+            const jogos = [];
+            for (let i = 0; i < times.length; i++) {
+                for (let j = i + 1; j < times.length; j++) {
+                    jogos.push({
+                        time1: times[i],
+                        time2: times[j],
+                        gols1: null,
+                        gols2: null,
+                        jogado: false
+                    });
+                }
+            }
+            return jogos;
+        }
+
+        function renderGrupos() {
+            let html = '';
+            
+            grupos.forEach(grupo => {
+                html += `<div class="grupo-card">`;
+                html += `<h3>Grupo ${grupo.nome}</h3>`;
+                
+                html += `<table class="tabela">`;
+                html += `<tr><th>Time</th><th>P</th><th>J</th><th>V</th><th>E</th><th>D</th><th>GP</th><th>GC</th><th>SG</th></tr>`;
+                
+                const classificacao = [...grupo.classificacao].sort((a, b) => 
+                    b.pontos - a.pontos || (b.golsPro - b.golsContra) - (a.golsPro - a.golsContra)
+                );
+                
+                classificacao.forEach(t => {
+                    const saldo = t.golsPro - t.golsContra;
+                    html += `<tr>
+                        <td>${t.time}</td>
+                        <td><strong>${t.pontos}</strong></td>
+                        <td>${t.jogos}</td>
+                        <td>${t.vitorias}</td>
+                        <td>${t.empates}</td>
+                        <td>${t.derrotas}</td>
+                        <td>${t.golsPro}</td>
+                        <td>${t.golsContra}</td>
+                        <td>${saldo > 0 ? '+' : ''}${saldo}</td>
+                    </tr>`;
+                });
+                
+                html += `</table>`;
+                
+                grupo.jogos.forEach((jogo, idx) => {
+                    if (jogo.jogado) {
+                        html += `
+                            <div class="jogo jogado">
+                                <span style="flex:1;">${jogo.time1}</span>
+                                <span class="placar-fixo">${jogo.gols1} x ${jogo.gols2}</span>
+                                <span style="flex:1;">${jogo.time2}</span>
+                            </div>
+                        `;
+                    } else {
+                        html += `
+                            <div class="jogo">
+                                <span style="flex:1;">${jogo.time1}</span>
+                                <input type="number" class="placar-input" id="g1-${grupo.nome}-${idx}" min="0" value="0">
+                                <span>x</span>
+                                <input type="number" class="placar-input" id="g2-${grupo.nome}-${idx}" min="0" value="0">
+                                <span style="flex:1;">${jogo.time2}</span>
+                                <button class="primario" onclick="registrarJogo('${grupo.nome}', ${idx})">✓</button>
+                            </div>
+                        `;
+                    }
+                });
+                
+                html += `</div>`;
+            });
+            
+            gruposContainer.innerHTML = html;
+        }
+
+        window.registrarJogo = (grupoNome, idx) => {
+            const grupo = grupos.find(g => g.nome === grupoNome);
+            const jogo = grupo.jogos[idx];
+            
+            const g1 = parseInt(document.getElementById(`g1-${grupoNome}-${idx}`).value);
+            const g2 = parseInt(document.getElementById(`g2-${grupoNome}-${idx}`).value);
+            
+            if (isNaN(g1) || isNaN(g2)) return mostrarMensagem('Preencha os placares', true);
+            
+            jogo.gols1 = g1;
+            jogo.gols2 = g2;
+            jogo.jogado = true;
+
+            const t1 = grupo.classificacao.find(t => t.time === jogo.time1);
+            const t2 = grupo.classificacao.find(t => t.time === jogo.time2);
+
+            t1.jogos++; t2.jogos++;
+            t1.golsPro += g1; t1.golsContra += g2;
+            t2.golsPro += g2; t2.golsContra += g1;
+
+            if (g1 > g2) { t1.vitorias++; t2.derrotas++; t1.pontos += 3; }
+            else if (g2 > g1) { t2.vitorias++; t1.derrotas++; t2.pontos += 3; }
+            else { t1.empates++; t2.empates++; t1.pontos++; t2.pontos++; }
+
+            estatisticas[jogo.time1].golsPro += g1;
+            estatisticas[jogo.time1].golsContra += g2;
+            estatisticas[jogo.time2].golsPro += g2;
+            estatisticas[jogo.time2].golsContra += g1;
+            
+            if (g1 > g2) {
+                estatisticas[jogo.time1].vitorias++;
+                estatisticas[jogo.time1].pontos += 3;
+                estatisticas[jogo.time2].derrotas++;
+            } else if (g2 > g1) {
+                estatisticas[jogo.time2].vitorias++;
+                estatisticas[jogo.time2].pontos += 3;
+                estatisticas[jogo.time1].derrotas++;
+            } else {
+                estatisticas[jogo.time1].empates++;
+                estatisticas[jogo.time1].pontos++;
+                estatisticas[jogo.time2].empates++;
+                estatisticas[jogo.time2].pontos++;
+            }
+
+            renderGrupos();
+            
+            if (jogadorTimes.length > 0) {
+                renderRanking();
+            }
+            
+            mostrarMensagem('Jogo registrado!');
+        };
+
+        btnAvancarMata.addEventListener('click', () => {
+            const todosJogados = grupos.every(g => g.jogos.every(j => j.jogado));
+            if (!todosJogados) {
+                return mostrarMensagem('Complete todos os jogos dos grupos!', true);
+            }
+
+            const classificados = [];
+            grupos.forEach(grupo => {
+                const ordem = [...grupo.classificacao].sort((a, b) => 
+                    b.pontos - a.pontos || (b.golsPro - b.golsContra) - (a.golsPro - a.golsContra)
+                );
+                classificados.push(ordem[0].time, ordem[1].time);
+            });
+
+            const embaralhados = [...classificados].sort(() => Math.random() - 0.5);
+            chaves.oitavas = [];
+            for (let i = 0; i < embaralhados.length; i += 2) {
+                chaves.oitavas.push({
+                    time1: embaralhados[i],
+                    time2: embaralhados[i + 1],
+                    gols1: null,
+                    gols2: null,
+                    vencedor: null,
+                    jogado: false
+                });
+            }
+
+            document.querySelector('#campeonatoArea > .card:first-child').style.display = 'none';
+            mataArea.style.display = 'block';
+            renderMata();
+        });
+
+        function renderMata() {
+            renderChave(chaves.oitavas, 'oitavas', oitavasContainer);
+            
+            if (chaves.quartas.length > 0) {
+                quartasCard.style.display = 'block';
+                renderChave(chaves.quartas, 'quartas', quartasContainer);
+            }
+            
+            if (chaves.semis.length > 0) {
+                semisCard.style.display = 'block';
+                renderChave(chaves.semis, 'semis', semisContainer);
+            }
+            
+            if (chaves.final.length > 0) {
+                finalCard.style.display = 'block';
+                renderChave(chaves.final, 'final', finalContainer);
+            }
+        }
+
+        function renderChave(chavesArray, nome, container) {
+            let html = '';
+            
+            chavesArray.forEach((chave, idx) => {
+                if (chave.jogado) {
+                    html += `
+                        <div class="chave">
+                            <div class="confronto">
+                                <span style="font-weight: 700;">${chave.time1}</span>
+                                <span class="placar-fixo">${chave.gols1} x ${chave.gols2}</span>
+                                <span style="font-weight: 700;">${chave.time2}</span>
+                            </div>
+                            <div class="vencedor">🏆 ${chave.vencedor} avança</div>
+                        </div>
+                    `;
+                } else {
+                    html += `
+                        <div class="chave">
+                            <div class="confronto">
+                                <span>${chave.time1}</span>
+                                <div class="placar-mata">
+                                    <input type="number" id="${nome}-g1-${idx}" min="0" value="0" style="width:60px; text-align:center;">
+                                    <span>x</span>
+                                    <input type="number" id="${nome}-g2-${idx}" min="0" value="0" style="width:60px; text-align:center;">
+                                </div>
+                                <span>${chave.time2}</span>
+                            </div>
+                            <button class="primario" style="width:100%; margin-top:10px;" onclick="registrarMata('${nome}', ${idx})">Registrar</button>
+                        </div>
+                    `;
+                }
+            });
+            
+            container.innerHTML = html;
+        }
+
+        window.registrarMata = (fase, idx) => {
+            const chave = chaves[fase][idx];
+            
+            const g1 = parseInt(document.getElementById(`${fase}-g1-${idx}`).value);
+            const g2 = parseInt(document.getElementById(`${fase}-g2-${idx}`).value);
+            
+            if (isNaN(g1) || isNaN(g2)) return mostrarMensagem('Preencha os placares', true);
+            
+            chave.gols1 = g1;
+            chave.gols2 = g2;
+            chave.jogado = true;
+
+            if (g1 > g2) chave.vencedor = chave.time1;
+            else if (g2 > g1) chave.vencedor = chave.time2;
+            else {
+                chave.vencedor = Math.random() > 0.5 ? chave.time1 : chave.time2;
+                mostrarMensagem(`Empate! ${chave.vencedor} venceu nos pênaltis`);
+            }
+
+            if (fase === 'oitavas' && chaves.oitavas.every(c => c.jogado)) {
+                const vencedores = chaves.oitavas.map(c => c.vencedor);
+                chaves.quartas = [];
+                for (let i = 0; i < vencedores.length; i += 2) {
+                    chaves.quartas.push({
+                        time1: vencedores[i],
+                        time2: vencedores[i + 1],
+                        gols1: null, gols2: null, vencedor: null, jogado: false
+                    });
+                }
+            }
+            else if (fase === 'quartas' && chaves.quartas.every(c => c.jogado)) {
+                const vencedores = chaves.quartas.map(c => c.vencedor);
+                chaves.semis = [];
+                for (let i = 0; i < vencedores.length; i += 2) {
+                    chaves.semis.push({
+                        time1: vencedores[i],
+                        time2: vencedores[i + 1],
+                        gols1: null, gols2: null, vencedor: null, jogado: false
+                    });
+                }
+            }
+            else if (fase === 'semis' && chaves.semis.every(c => c.jogado)) {
+                const vencedores = chaves.semis.map(c => c.vencedor);
+                chaves.final = [{
+                    time1: vencedores[0],
+                    time2: vencedores[1],
+                    gols1: null, gols2: null, vencedor: null, jogado: false
+                }];
+            }
+            else if (fase === 'final' && chaves.final.every(c => c.jogado)) {
+                const campeao = chaves.final[0].vencedor;
+                let dono = null;
+                for (const jt of jogadorTimes) {
+                    if (jt.time === campeao) dono = jt.jogador;
+                }
+                
+                campeaoAtual = { time: campeao, jogador: dono };
+                campeaoTime.textContent = `🏆 ${campeao} 🏆`;
+                campeaoJogador.textContent = dono ? `👤 Jogador: ${dono}` : '';
+                campeaoCard.style.display = 'block';
+            }
+
+            renderMata();
+            
+            if (jogadorTimes.length > 0) {
+                renderRanking();
+            }
+        };
+
+        // Registrar campeão no histórico
+        btnRegistrarCampeao.addEventListener('click', () => {
+            if (campeaoAtual) {
+                adicionarCampeaoHistorico(
+                    campeaoAtual.time,
+                    campeaoAtual.time,
+                    campeaoAtual.jogador
+                );
+                mostrarMensagem('✅ Campeão registrado!');
+            }
+        });
+
+        function renderRanking() {
+            const pontosJogadores = jogadorTimes.map(jt => {
+                const stats = estatisticas[jt.time] || { pontos: 0, vitorias: 0 };
+                return {
+                    jogador: jt.jogador,
+                    time: jt.time,
+                    pontos: stats.pontos,
+                    vitorias: stats.vitorias
+                };
+            }).sort((a, b) => b.pontos - a.pontos || b.vitorias - a.vitorias);
+
+            let html = '';
+            pontosJogadores.forEach((j, i) => {
+                html += `
+                    <div style="background: #1a2525; border-radius: 40px; padding: 12px 20px; margin: 8px 0; display: flex; justify-content: space-between;">
+                        <span><strong>${i+1}º</strong> ${j.jogador}</span>
+                        <span style="color: #00e676; font-weight: 700;">${j.pontos} pts</span>
+                    </div>
+                `;
+            });
+            
+            rankingContainer.innerHTML = html;
+        }
+
+        // Salvar
+        btnSalvar.addEventListener('click', () => {
+            const estado = {
+                jogadores,
+                timesSelecionados,
+                timesPersonalizados,
+                jogadorTimes,
+                grupos,
+                chaves,
+                estatisticas,
+                faseAtual,
+                campeaoAtual
+            };
+            localStorage.setItem('copa_amigos_v2', JSON.stringify(estado));
+            mostrarMensagem('Salvo!');
+        });
+
+        // Carregar
+        btnCarregar.addEventListener('click', () => {
+            const saved = localStorage.getItem('copa_amigos_v2');
+            if (!saved) return mostrarMensagem('Nada salvo', true);
+            
+            const estado = JSON.parse(saved);
+            jogadores = estado.jogadores || [];
+            timesSelecionados = estado.timesSelecionados || [];
+            timesPersonalizados = estado.timesPersonalizados || [];
+            jogadorTimes = estado.jogadorTimes || [];
+            grupos = estado.grupos || [];
+            chaves = estado.chaves || { oitavas: [], quartas: [], semis: [], final: [] };
+            estatisticas = estado.estatisticas || {};
+            faseAtual = estado.faseAtual || 'grupos';
+            campeaoAtual = estado.campeaoAtual || null;
+            
+            renderJogadores();
+            renderTimes();
+            
+            if (jogadores.length > 0 && timesSelecionados.length === 32) {
+                sorteioCard.style.display = 'block';
+            }
+            
+            if (jogadorTimes.length > 0) {
+                let html = '<h3>🎲 Times sorteados:</h3>';
+                jogadorTimes.forEach(item => {
+                    html += `
+                        <div style="background: #0a0f0f; border-radius: 40px; padding: 12px 20px; margin: 8px 0; display: flex; justify-content: space-between;">
+                            <span style="color: #00e676;">${item.jogador}</span>
+                            <span>⚽ ${item.time}</span>
+                        </div>
+                    `;
+                });
+                resultadoSorteio.innerHTML = html;
+                btnIniciarCampeonato.disabled = false;
+                rankingCard.style.display = 'block';
+            }
+            
+            if (grupos.length > 0) {
+                campeonatoArea.style.display = 'block';
+                renderGrupos();
+                
+                if (faseAtual !== 'grupos') {
+                    document.querySelector('#campeonatoArea > .card:first-child').style.display = 'none';
+                    mataArea.style.display = 'block';
+                    renderMata();
+                }
+            }
+            
+            if (campeaoAtual) {
+                campeaoTime.textContent = `🏆 ${campeaoAtual.time} 🏆`;
+                campeaoJogador.textContent = campeaoAtual.jogador ? `👤 Jogador: ${campeaoAtual.jogador}` : '';
+                campeaoCard.style.display = 'block';
+            }
+            
+            if (jogadorTimes.length > 0) {
+                renderRanking();
+            }
+            
+            mostrarMensagem('Carregado!');
+        });
+
+        // Novo campeonato (reseta apenas o atual, mantém histórico)
+        btnNovoCampeonato.addEventListener('click', () => {
+            if (confirm('Iniciar um novo campeonato? O atual será perdido.')) {
+                jogadores = [];
+                timesSelecionados = [];
+                timesPersonalizados = [];
+                jogadorTimes = [];
+                grupos = [];
+                chaves = { oitavas: [], quartas: [], semis: [], final: [] };
+                estatisticas = {};
+                faseAtual = 'grupos';
+                campeaoAtual = null;
+                
+                renderJogadores();
+                renderTimes();
+                
+                sorteioCard.style.display = 'none';
+                campeonatoArea.style.display = 'none';
+                mataArea.style.display = 'none';
+                campeaoCard.style.display = 'none';
+                
+                mostrarMensagem('Novo campeonato criado!');
+            }
+        });
+
+        // Inicializar
+        renderTimes();
+        renderHistorico();
+    </script>
+</body>
+</html>
