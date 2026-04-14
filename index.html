@@ -642,6 +642,7 @@
             "River Plate", "Napoli"
         ];
 
+<<<<<<< HEAD
         // Banco de dados IndexedDB
         let db = null;
 
@@ -792,6 +793,10 @@
                 store.add(campeao);
             });
         }
+=======
+        // Histórico de campeões
+        let historicoCampeoes = JSON.parse(localStorage.getItem('historico_campeoes')) || [];
+>>>>>>> 12a477f5cdfbbdeb5bb2b9d976d81a5e9ce6fac9
 
         // Estado do campeonato atual
         let jogadores = [];
@@ -1128,7 +1133,10 @@
             }
             
             mostrarMensagem('Campeonato iniciado!');
+<<<<<<< HEAD
             salvarNoDB();
+=======
+>>>>>>> 12a477f5cdfbbdeb5bb2b9d976d81a5e9ce6fac9
         });
 
         function gerarJogos(times) {
@@ -1486,6 +1494,7 @@
                 historicoCampeoes,
                 exportDate: new Date().toISOString()
             };
+
             
             const dataStr = JSON.stringify(estado, null, 2);
             const blob = new Blob([dataStr], { type: 'application/json' });
@@ -1496,6 +1505,10 @@
             a.click();
             URL.revokeObjectURL(url);
             mostrarMensagem('Backup exportado!');
+
+            localStorage.setItem('copa_amigos_v2', JSON.stringify(estado));
+            mostrarMensagem('✅ Salvo com sucesso!');
+
         });
 
         // Importar backup
@@ -1507,6 +1520,7 @@
             const file = e.target.files[0];
             if (!file) return;
             
+
             const reader = new FileReader();
             reader.onload = (event) => {
                 try {
@@ -1547,6 +1561,69 @@
             }
         });
 
+
+            try {
+                const estado = JSON.parse(saved);
+                jogadores = estado.jogadores || [];
+                timesSelecionados = estado.timesSelecionados || [];
+                timesPersonalizados = estado.timesPersonalizados || [];
+                jogadorTimes = estado.jogadorTimes || [];
+                grupos = estado.grupos || [];
+                chaves = estado.chaves || { oitavas: [], quartas: [], semis: [], final: [] };
+                estatisticas = estado.estatisticas || {};
+                faseAtual = estado.faseAtual || 'grupos';
+                campeaoAtual = estado.campeaoAtual || null;
+                
+                renderJogadores();
+                renderTimes();
+                
+                if (jogadores.length > 0 && timesSelecionados.length === 32) {
+                    sorteioCard.style.display = 'block';
+                }
+                
+                if (jogadorTimes.length > 0) {
+                    let html = '<h3>🎲 Times sorteados:</h3>';
+                    jogadorTimes.forEach(item => {
+                        html += `
+                            <div style="background: #0a0f0f; border-radius: 40px; padding: 12px 20px; margin: 8px 0; display: flex; justify-content: space-between;">
+                                <span style="color: #00e676;">${item.jogador}</span>
+                                <span>⚽ ${item.time}</span>
+                            </div>
+                        `;
+                    });
+                    resultadoSorteio.innerHTML = html;
+                    btnIniciarCampeonato.disabled = false;
+                    rankingCard.style.display = 'block';
+                }
+                
+                if (grupos.length > 0) {
+                    campeonatoArea.style.display = 'block';
+                    renderGrupos();
+                    
+                    if (faseAtual !== 'grupos') {
+                        document.querySelector('#campeonatoArea > .card:first-child').style.display = 'none';
+                        mataArea.style.display = 'block';
+                        renderMata();
+                    }
+                }
+                
+                if (campeaoAtual) {
+                    campeaoTime.textContent = `🏆 ${campeaoAtual.time} 🏆`;
+                    campeaoJogador.textContent = campeaoAtual.jogador ? `👤 Jogador: ${campeaoAtual.jogador}` : '';
+                    campeaoCard.style.display = 'block';
+                }
+                
+                if (jogadorTimes.length > 0) {
+                    renderRanking();
+                }
+                
+                mostrarMensagem('✅ Carregado com sucesso!');
+            } catch (e) {
+                mostrarMensagem('Erro ao carregar dados', true);
+            }
+        });
+
+>>>>>>> 12a477f5cdfbbdeb5bb2b9d976d81a5e9ce6fac9
         // Novo campeonato
         btnNovoCampeonato.addEventListener('click', () => {
             if (confirm('Iniciar um novo campeonato? O atual será perdido.')) {
