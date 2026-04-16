@@ -142,6 +142,11 @@
             color: #fff;
         }
 
+        .btn-success {
+            background: #00c853;
+            color: #000;
+        }
+
         .btn-sm {
             padding: 6px 12px;
             font-size: 0.8rem;
@@ -170,7 +175,6 @@
             gap: 10px;
             font-weight: 600;
             font-size: 0.9rem;
-            white-space: nowrap;
         }
 
         .tag-remove {
@@ -215,6 +219,7 @@
             transition: width 0.3s;
         }
 
+        /* Grupos - Estilo moderno */
         .grupos-wrapper {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -235,20 +240,27 @@
         }
 
         .grupo-card {
-            background: #0a0f0f;
-            border-radius: 16px;
+            background: linear-gradient(135deg, #0a1212 0%, #0a1a1a 100%);
+            border-radius: 20px;
             padding: 15px;
             border: 1px solid #2d3e3e;
+            transition: transform 0.2s;
+        }
+
+        .grupo-card:hover {
+            transform: translateY(-2px);
+            border-color: #00e676;
         }
 
         .grupo-header {
-            background: #00c853;
+            background: linear-gradient(135deg, #00c853, #00e676);
             color: #000;
-            padding: 8px;
+            padding: 10px;
             text-align: center;
             border-radius: 40px;
             font-weight: bold;
             margin-bottom: 15px;
+            font-size: 1.1rem;
         }
 
         .tabela {
@@ -268,149 +280,161 @@
             color: #00e676;
         }
 
-        .tabela td:first-child {
-            text-align: left;
-            max-width: 100px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
         .jogos-grupo {
             margin-top: 15px;
+            max-height: 250px;
+            overflow-y: auto;
         }
 
         .jogo-grupo {
             background: #1a2525;
             border-radius: 30px;
-            padding: 10px 12px;
-            margin: 8px 0;
+            padding: 8px 10px;
+            margin: 6px 0;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 8px;
+            gap: 6px;
             flex-wrap: wrap;
         }
 
         .jogo-grupo.jogado {
-            background: #1a3a3a;
+            background: linear-gradient(135deg, #1a3a3a, #0a2a2a);
             border: 1px solid #00e676;
         }
 
         .time-nome {
             flex: 1;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             word-break: break-word;
-            min-width: 80px;
+            min-width: 60px;
         }
 
         .placar-group {
             display: flex;
-            gap: 8px;
+            gap: 5px;
             align-items: center;
             background: #0a0f0f;
-            padding: 4px 12px;
+            padding: 3px 8px;
             border-radius: 30px;
         }
 
         .placar-group input {
-            width: 50px;
-            padding: 6px;
+            width: 40px;
+            padding: 4px;
             text-align: center;
+            font-size: 0.8rem;
         }
 
         .placar-exibido {
             font-weight: bold;
             color: #00e676;
             background: #0a0f0f;
-            padding: 4px 12px;
+            padding: 3px 10px;
             border-radius: 30px;
-            font-size: 0.9rem;
-            min-width: 70px;
+            font-size: 0.8rem;
+            min-width: 60px;
             text-align: center;
         }
 
+        /* Mata-mata estilo torneio */
         .mata-container {
             display: flex;
-            justify-content: space-around;
-            gap: 20px;
+            justify-content: center;
+            gap: 30px;
             overflow-x: auto;
-            padding: 10px 0;
+            padding: 20px 10px;
+            background: #0a0f0f;
+            border-radius: 20px;
         }
 
         .fase-coluna {
             flex: 1;
             min-width: 260px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 20px;
+            padding: 15px;
         }
 
         .fase-titulo {
-            background: #00c853;
-            color: #000;
+            background: linear-gradient(135deg, #ff9800, #ff5722);
+            color: #fff;
             padding: 10px;
             text-align: center;
             border-radius: 40px;
             font-weight: bold;
             margin-bottom: 15px;
+            font-size: 1rem;
         }
 
         .confronto-card {
-            background: #0a0f0f;
-            border: 1px solid #2d3e3e;
+            background: #1a2525;
             border-radius: 16px;
-            padding: 15px;
+            padding: 12px;
             margin-bottom: 15px;
+            transition: all 0.2s;
+        }
+
+        .confronto-card:hover {
+            transform: scale(1.02);
+            border: 1px solid #00e676;
         }
 
         .confronto-times {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 10px;
-            margin-bottom: 12px;
+            gap: 8px;
+            margin-bottom: 10px;
             flex-wrap: wrap;
         }
 
         .time-mata {
             flex: 1;
             font-weight: bold;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             text-align: center;
             word-break: break-word;
+            background: #0a0f0f;
+            padding: 6px;
+            border-radius: 30px;
         }
 
         .placar-mata {
             display: flex;
-            gap: 8px;
+            gap: 5px;
             align-items: center;
-            background: #1a2525;
-            padding: 5px 10px;
+            background: #0a0f0f;
+            padding: 4px 8px;
             border-radius: 30px;
         }
 
         .placar-mata input {
-            width: 45px;
-            padding: 6px;
+            width: 40px;
+            padding: 4px;
             text-align: center;
         }
 
         .placar-resultado {
             font-weight: bold;
-            color: #00e676;
+            color: #ff9800;
             font-size: 1rem;
-            min-width: 70px;
+            min-width: 60px;
             text-align: center;
+            background: #0a0f0f;
+            padding: 4px 8px;
+            border-radius: 30px;
         }
 
         .vencedor-mata {
-            background: gold;
+            background: linear-gradient(135deg, gold, #ff9800);
             color: #000;
             padding: 6px;
             text-align: center;
             border-radius: 30px;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             font-weight: bold;
-            margin-top: 10px;
-            word-break: break-word;
+            margin-top: 8px;
         }
 
         .toast {
@@ -444,7 +468,7 @@
         }
 
         .ranking-item {
-            background: #0a0f0f;
+            background: linear-gradient(135deg, #1a2525, #0a1a1a);
             border-radius: 40px;
             padding: 12px 15px;
             margin: 8px 0;
@@ -453,14 +477,22 @@
             align-items: center;
             flex-wrap: wrap;
             gap: 10px;
+            border-left: 4px solid gold;
         }
 
         .campeao-box {
             text-align: center;
             background: linear-gradient(135deg, #1a3a1a, #0a2a0a);
-            border: 2px solid gold;
-            border-radius: 20px;
-            padding: 25px;
+            border: 3px solid gold;
+            border-radius: 30px;
+            padding: 30px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.4); }
+            70% { box-shadow: 0 0 0 15px rgba(255, 215, 0, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); }
         }
 
         .sorteio-resultado {
@@ -471,7 +503,7 @@
         }
 
         .sorteio-item {
-            background: #1a2525;
+            background: linear-gradient(135deg, #1a2525, #0a1a1a);
             border-radius: 40px;
             padding: 10px 15px;
             margin: 8px 0;
@@ -493,14 +525,16 @@
             text-align: right;
         }
 
-        .salvamento-info {
-            background: #0a2a2a;
-            border-radius: 16px;
-            padding: 10px;
-            margin-top: 10px;
-            text-align: center;
-            font-size: 0.8rem;
-            color: #00e676;
+        .btn-novo-torneio {
+            background: linear-gradient(135deg, #ff9800, #ff5722);
+            color: #fff;
+            font-weight: bold;
+            padding: 12px 24px;
+            font-size: 1rem;
+        }
+
+        .btn-novo-torneio:hover {
+            transform: scale(1.05);
         }
     </style>
 </head>
@@ -566,8 +600,8 @@
                 </div>
             </div>
             
-            <div class="salvamento-info">
-                💾 Todos os dados são salvos automaticamente
+            <div style="margin-top: 10px; text-align: center;">
+                <button id="btnResetarCompleto" class="btn btn-danger btn-novo-torneio">🆕 CRIAR NOVO TORNEIO (LIMPAR TUDO)</button>
             </div>
         </div>
 
@@ -581,7 +615,7 @@
                 <div class="card">
                     <div class="card-title"><span>📊 FASE DE GRUPOS</span></div>
                     <div id="gruposContainer"></div>
-                    <button id="btnAvancarMata" class="btn btn-primary" style="width: 100%; margin-top: 20px;" disabled>⏩ AVANÇAR PARA MATA-MATA</button>
+                    <button id="btnAvancarMata" class="btn btn-primary" style="width: 100%; margin-top: 20px; padding: 15px;" disabled>⏩ AVANÇAR PARA MATA-MATA</button>
                 </div>
             </div>
 
@@ -627,7 +661,6 @@
                 <button id="btnExportar" class="btn btn-primary" style="width: 100%; margin-bottom: 10px;">📤 Exportar Dados (Backup)</button>
                 <button id="btnImportar" class="btn btn-secondary" style="width: 100%; margin-bottom: 10px;">📥 Importar Dados</button>
                 <input type="file" id="fileImportar" accept=".json" style="display: none;">
-                <button id="btnResetar" class="btn btn-danger" style="width: 100%;">🗑️ Resetar Tudo</button>
                 <p style="margin-top: 15px; color: #888; font-size: 0.8rem;">
                     💡 Dica: Exporte seus dados para transferir entre dispositivos ou fazer backup!
                 </p>
@@ -646,7 +679,7 @@
             "River Plate", "Napoli"
         ];
 
-        // ==================== DADOS GLOBAIS (TUDO ZERADO) ====================
+        // ==================== DADOS GLOBAIS ====================
         let jogadores = [];
         let timesSelecionados = [];
         let timesPersonalizados = [];
@@ -675,7 +708,6 @@
                 ultimaAtualizacao: new Date().toISOString()
             };
             localStorage.setItem('copaAmigos', JSON.stringify(dados));
-            console.log('💾 Dados salvos em:', new Date().toLocaleTimeString());
         }
 
         function carregarTudo() {
@@ -694,42 +726,38 @@
                     faseAtual = dados.faseAtual || 'grupos';
                     campeao = dados.campeao || null;
                     historico = dados.historico || [];
-                    console.log('📂 Dados carregados, último save:', dados.ultimaAtualizacao);
-                } catch(e) {
-                    console.error('Erro ao carregar:', e);
-                }
+                } catch(e) {}
             }
             atualizarInterface();
         }
 
-        function resetarTudo() {
-            jogadores = [];
-            timesSelecionados = [];
-            timesPersonalizados = [];
-            jogadorTimes = [];
-            grupos = [];
-            chaves = { oitavas: [], quartas: [], semis: [], final: [] };
-            estatisticas = {};
-            torneioIniciado = false;
-            faseAtual = 'grupos';
-            campeao = null;
-            historico = [];
-            salvarTudo();
-            atualizarInterface();
-            mostrarMensagem('Todos os dados foram resetados!');
-        }
-
-        // Salvar automaticamente antes de fechar a página
-        window.addEventListener('beforeunload', () => {
-            salvarTudo();
-        });
-
-        // Salvar a cada 30 segundos também
-        setInterval(() => {
-            if (torneioIniciado || jogadores.length > 0 || timesSelecionados.length > 0) {
+        // RESET COMPLETO PARA NOVO TORNEIO
+        function resetarParaNovoTorneio() {
+            if (confirm('🆕 Criar um NOVO TORNEIO?\n\nATENÇÃO: Isso irá apagar TODOS os dados do torneio atual!\n\nJogadores, times, partidas e sorteios serão resetados.\n\nO histórico de campeões será mantido.\n\nDeseja continuar?')) {
+                // Limpa tudo menos o histórico
+                jogadores = [];
+                timesSelecionados = [];
+                timesPersonalizados = [];
+                jogadorTimes = [];
+                grupos = [];
+                chaves = { oitavas: [], quartas: [], semis: [], final: [] };
+                estatisticas = {};
+                torneioIniciado = false;
+                faseAtual = 'grupos';
+                campeao = null;
+                
                 salvarTudo();
+                atualizarInterface();
+                
+                // Voltar para aba principal
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelector('.tab[data-tab="principal"]').classList.add('active');
+                document.querySelectorAll('.tab-content').forEach(content => content.style.display = 'none');
+                document.getElementById('tab-principal').style.display = 'block';
+                
+                mostrarMensagem('✅ Novo torneio criado! Tudo está limpo e pronto para começar!');
             }
-        }, 30000);
+        }
 
         // ==================== RENDERIZAÇÃO ====================
         function atualizarInterface() {
@@ -835,7 +863,15 @@
                     <table class="tabela">
                         <tr><th>Time</th><th>P</th><th>J</th><th>V</th><th>E</th><th>D</th><th>GP</th><th>GC</th></tr>
                         ${grupo.classificacao.sort((a,b) => b.pontos - a.pontos).map(t => `
-                            <tr><td title="${t.time}">${t.time.length > 12 ? t.time.substring(0, 10) + '...' : t.time}</td></td><td><strong>${t.pontos}</strong></td><td>${t.jogos}</td><td>${t.vitorias}</td><td>${t.empates}</td><td>${t.derrotas}</td><td>${t.golsPro}</td><td>${t.golsContra}</td></tr>
+                            <tr><td title="${t.time}">${t.time.length > 12 ? t.time.substring(0, 10) + '...' : t.time}</td>
+                            <td><strong>${t.pontos}</strong></td>
+                            <td>${t.jogos}</td>
+                            <td>${t.vitorias}</td>
+                            <td>${t.empates}</td>
+                            <td>${t.derrotas}</td>
+                            <td>${t.golsPro}</td>
+                            <td>${t.golsContra}</td>
+                            </tr>
                         `).join('')}
                     </table>
                     <div class="jogos-grupo">
@@ -853,9 +889,9 @@
                                     <div class="jogo-grupo">
                                         <span class="time-nome" title="${jogo.time1}">${jogo.time1}</span>
                                         <div class="placar-group">
-                                            <input type="number" id="g1-${grupo.nome}-${idx}" min="0" value="0" style="width:45px;">
+                                            <input type="number" id="g1-${grupo.nome}-${idx}" min="0" value="0" style="width:40px;">
                                             <span>x</span>
-                                            <input type="number" id="g2-${grupo.nome}-${idx}" min="0" value="0" style="width:45px;">
+                                            <input type="number" id="g2-${grupo.nome}-${idx}" min="0" value="0" style="width:40px;">
                                         </div>
                                         <span class="time-nome" title="${jogo.time2}">${jogo.time2}</span>
                                         <button class="btn btn-primary btn-sm" onclick="registrarJogo('${grupo.nome}', ${idx})">✓</button>
@@ -911,9 +947,9 @@
                                 <div class="confronto-times">
                                     <div class="time-mata" title="${confronto.time1}">${confronto.time1}</div>
                                     <div class="placar-mata">
-                                        <input type="number" id="${fase.id}-g1-${idx}" min="0" value="0">
+                                        <input type="number" id="${fase.id}-g1-${idx}" min="0" value="0" style="width:40px;">
                                         <span>x</span>
-                                        <input type="number" id="${fase.id}-g2-${idx}" min="0" value="0">
+                                        <input type="number" id="${fase.id}-g2-${idx}" min="0" value="0" style="width:40px;">
                                     </div>
                                     <div class="time-mata" title="${confronto.time2}">${confronto.time2}</div>
                                 </div>
@@ -1259,18 +1295,18 @@
             reader.readAsText(file);
         };
 
-        document.getElementById('btnResetar').onclick = () => {
-            if (confirm('ATENÇÃO! Isso vai apagar TODOS os dados do torneio. Tem certeza?')) {
-                localStorage.removeItem('copaAmigos');
-                mostrarMensagem('Dados resetados! Recarregando...');
-                setTimeout(() => window.location.reload(), 1000);
-            }
+        document.getElementById('btnResetarCompleto').onclick = () => {
+            resetarParaNovoTorneio();
         };
 
         // Busca de times
         document.getElementById('buscaTime').oninput = function() {
             renderizarTimesSelecionados();
         };
+
+        // Salvar automaticamente
+        window.addEventListener('beforeunload', () => salvarTudo());
+        setInterval(() => salvarTudo(), 30000);
 
         // Navegação entre abas
         document.querySelectorAll('.tab').forEach(tab => {
