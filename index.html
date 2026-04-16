@@ -163,17 +163,20 @@
         .tag {
             background: #00e676;
             color: #000;
-            padding: 6px 12px;
+            padding: 8px 16px;
             border-radius: 40px;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             font-weight: 600;
+            font-size: 0.9rem;
+            white-space: nowrap;
         }
 
         .tag-remove {
             cursor: pointer;
             font-weight: bold;
+            font-size: 1.1rem;
         }
 
         .time-card {
@@ -251,7 +254,7 @@
         .tabela {
             width: 100%;
             border-collapse: collapse;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
         }
 
         .tabela th, .tabela td {
@@ -265,6 +268,14 @@
             color: #00e676;
         }
 
+        .tabela td:first-child {
+            text-align: left;
+            max-width: 100px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
         .jogos-grupo {
             margin-top: 15px;
         }
@@ -272,7 +283,7 @@
         .jogo-grupo {
             background: #1a2525;
             border-radius: 30px;
-            padding: 8px 12px;
+            padding: 10px 12px;
             margin: 8px 0;
             display: flex;
             align-items: center;
@@ -288,10 +299,9 @@
 
         .time-nome {
             flex: 1;
-            font-size: 0.85rem;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            font-size: 0.8rem;
+            word-break: break-word;
+            min-width: 80px;
         }
 
         .placar-group {
@@ -315,6 +325,9 @@
             background: #0a0f0f;
             padding: 4px 12px;
             border-radius: 30px;
+            font-size: 0.9rem;
+            min-width: 70px;
+            text-align: center;
         }
 
         .mata-container {
@@ -327,7 +340,7 @@
 
         .fase-coluna {
             flex: 1;
-            min-width: 250px;
+            min-width: 260px;
         }
 
         .fase-titulo {
@@ -360,8 +373,9 @@
         .time-mata {
             flex: 1;
             font-weight: bold;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             text-align: center;
+            word-break: break-word;
         }
 
         .placar-mata {
@@ -382,6 +396,9 @@
         .placar-resultado {
             font-weight: bold;
             color: #00e676;
+            font-size: 1rem;
+            min-width: 70px;
+            text-align: center;
         }
 
         .vencedor-mata {
@@ -393,6 +410,7 @@
             font-size: 0.8rem;
             font-weight: bold;
             margin-top: 10px;
+            word-break: break-word;
         }
 
         .toast {
@@ -428,11 +446,13 @@
         .ranking-item {
             background: #0a0f0f;
             border-radius: 40px;
-            padding: 10px 15px;
+            padding: 12px 15px;
             margin: 8px 0;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         .campeao-box {
@@ -443,13 +463,44 @@
             padding: 25px;
         }
 
-        .lista-times-disponiveis {
+        .sorteio-resultado {
+            background: #0a0f0f;
+            border-radius: 16px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .sorteio-item {
+            background: #1a2525;
+            border-radius: 40px;
+            padding: 10px 15px;
+            margin: 8px 0;
             display: flex;
+            justify-content: space-between;
+            align-items: center;
             flex-wrap: wrap;
-            gap: 8px;
+            gap: 10px;
+        }
+
+        .sorteio-jogador {
+            color: #00e676;
+            font-weight: bold;
+        }
+
+        .sorteio-time {
+            font-weight: bold;
+            word-break: break-word;
+            text-align: right;
+        }
+
+        .salvamento-info {
+            background: #0a2a2a;
+            border-radius: 16px;
+            padding: 10px;
             margin-top: 10px;
-            max-height: 200px;
-            overflow-y: auto;
+            text-align: center;
+            font-size: 0.8rem;
+            color: #00e676;
         }
     </style>
 </head>
@@ -510,9 +561,13 @@
                         <span>Sortear 1 time para cada jogador</span>
                     </label>
                     <button id="btnSortear" class="btn btn-primary" style="width: 100%;">🎲 REALIZAR SORTEIO</button>
-                    <div id="resultadoSorteio" style="margin-top: 15px;"></div>
+                    <div id="resultadoSorteio" class="sorteio-resultado" style="display: none;"></div>
                     <button id="btnIniciarTorneio" class="btn btn-primary" style="width: 100%; margin-top: 15px;" disabled>🚀 INICIAR TORNEIO</button>
                 </div>
+            </div>
+            
+            <div class="salvamento-info">
+                💾 Todos os dados são salvos automaticamente
             </div>
         </div>
 
@@ -616,9 +671,11 @@
         function salvarTudo() {
             const dados = {
                 jogadores, timesSelecionados, timesPersonalizados, jogadorTimes,
-                grupos, chaves, estatisticas, torneioIniciado, faseAtual, campeao, historico
+                grupos, chaves, estatisticas, torneioIniciado, faseAtual, campeao, historico,
+                ultimaAtualizacao: new Date().toISOString()
             };
             localStorage.setItem('copaAmigos', JSON.stringify(dados));
+            console.log('💾 Dados salvos em:', new Date().toLocaleTimeString());
         }
 
         function carregarTudo() {
@@ -637,7 +694,10 @@
                     faseAtual = dados.faseAtual || 'grupos';
                     campeao = dados.campeao || null;
                     historico = dados.historico || [];
-                } catch(e) {}
+                    console.log('📂 Dados carregados, último save:', dados.ultimaAtualizacao);
+                } catch(e) {
+                    console.error('Erro ao carregar:', e);
+                }
             }
             atualizarInterface();
         }
@@ -658,6 +718,18 @@
             atualizarInterface();
             mostrarMensagem('Todos os dados foram resetados!');
         }
+
+        // Salvar automaticamente antes de fechar a página
+        window.addEventListener('beforeunload', () => {
+            salvarTudo();
+        });
+
+        // Salvar a cada 30 segundos também
+        setInterval(() => {
+            if (torneioIniciado || jogadores.length > 0 || timesSelecionados.length > 0) {
+                salvarTudo();
+            }
+        }, 30000);
 
         // ==================== RENDERIZAÇÃO ====================
         function atualizarInterface() {
@@ -711,13 +783,23 @@
 
         function renderizarTimesSelecionados() {
             const container = document.getElementById('listaTimes');
+            const busca = document.getElementById('buscaTime').value.toLowerCase();
+            let timesFiltrados = timesSelecionados;
             
-            if (timesSelecionados.length === 0) {
-                container.innerHTML = '<span style="color: #888;">Nenhum time selecionado. Clique em "Carregar 32 Times Padrão" ou crie seus próprios times.</span>';
+            if (busca) {
+                timesFiltrados = timesSelecionados.filter(time => time.toLowerCase().includes(busca));
+            }
+            
+            if (timesFiltrados.length === 0) {
+                if (timesSelecionados.length === 0) {
+                    container.innerHTML = '<span style="color: #888;">Nenhum time selecionado. Clique em "Carregar 32 Times Padrão" ou crie seus próprios times.</span>';
+                } else {
+                    container.innerHTML = '<span style="color: #888;">Nenhum time encontrado com esse nome</span>';
+                }
                 return;
             }
             
-            container.innerHTML = timesSelecionados.map(time => `
+            container.innerHTML = timesFiltrados.map(time => `
                 <div class="time-card">
                     <span>⚽ ${time}</span>
                     <span class="tag-remove" onclick="removerTimeSelecionado('${time.replace(/'/g, "\\'")}')" style="margin-left: auto;">✕</span>
@@ -753,7 +835,7 @@
                     <table class="tabela">
                         <tr><th>Time</th><th>P</th><th>J</th><th>V</th><th>E</th><th>D</th><th>GP</th><th>GC</th></tr>
                         ${grupo.classificacao.sort((a,b) => b.pontos - a.pontos).map(t => `
-                            <tr><td style="text-align:left;">${t.time}</td><td><strong>${t.pontos}</strong></td><td>${t.jogos}</td><td>${t.vitorias}</td><td>${t.empates}</td><td>${t.derrotas}</td><td>${t.golsPro}</td><td>${t.golsContra}</td></tr>
+                            <tr><td title="${t.time}">${t.time.length > 12 ? t.time.substring(0, 10) + '...' : t.time}</td></td><td><strong>${t.pontos}</strong></td><td>${t.jogos}</td><td>${t.vitorias}</td><td>${t.empates}</td><td>${t.derrotas}</td><td>${t.golsPro}</td><td>${t.golsContra}</td></tr>
                         `).join('')}
                     </table>
                     <div class="jogos-grupo">
@@ -761,21 +843,21 @@
                             if (jogo.jogado) {
                                 return `
                                     <div class="jogo-grupo jogado">
-                                        <span class="time-nome">${jogo.time1}</span>
+                                        <span class="time-nome" title="${jogo.time1}">${jogo.time1}</span>
                                         <span class="placar-exibido">${jogo.gols1} x ${jogo.gols2}</span>
-                                        <span class="time-nome">${jogo.time2}</span>
+                                        <span class="time-nome" title="${jogo.time2}">${jogo.time2}</span>
                                     </div>
                                 `;
                             } else {
                                 return `
                                     <div class="jogo-grupo">
-                                        <span class="time-nome">${jogo.time1}</span>
+                                        <span class="time-nome" title="${jogo.time1}">${jogo.time1}</span>
                                         <div class="placar-group">
                                             <input type="number" id="g1-${grupo.nome}-${idx}" min="0" value="0" style="width:45px;">
                                             <span>x</span>
                                             <input type="number" id="g2-${grupo.nome}-${idx}" min="0" value="0" style="width:45px;">
                                         </div>
-                                        <span class="time-nome">${jogo.time2}</span>
+                                        <span class="time-nome" title="${jogo.time2}">${jogo.time2}</span>
                                         <button class="btn btn-primary btn-sm" onclick="registrarJogo('${grupo.nome}', ${idx})">✓</button>
                                     </div>
                                 `;
@@ -818,22 +900,22 @@
                         if (confronto.jogado) {
                             confrontoDiv.innerHTML = `
                                 <div class="confronto-times">
-                                    <div class="time-mata">${confronto.time1}</div>
+                                    <div class="time-mata" title="${confronto.time1}">${confronto.time1}</div>
                                     <div class="placar-resultado">${confronto.gols1} x ${confronto.gols2}</div>
-                                    <div class="time-mata">${confronto.time2}</div>
+                                    <div class="time-mata" title="${confronto.time2}">${confronto.time2}</div>
                                 </div>
                                 <div class="vencedor-mata">🏆 VENCEDOR: ${confronto.vencedor}</div>
                             `;
                         } else {
                             confrontoDiv.innerHTML = `
                                 <div class="confronto-times">
-                                    <div class="time-mata">${confronto.time1}</div>
+                                    <div class="time-mata" title="${confronto.time1}">${confronto.time1}</div>
                                     <div class="placar-mata">
                                         <input type="number" id="${fase.id}-g1-${idx}" min="0" value="0">
                                         <span>x</span>
                                         <input type="number" id="${fase.id}-g2-${idx}" min="0" value="0">
                                     </div>
-                                    <div class="time-mata">${confronto.time2}</div>
+                                    <div class="time-mata" title="${confronto.time2}">${confronto.time2}</div>
                                 </div>
                                 <button class="btn btn-primary btn-sm" style="width:100%; margin-top:10px;" onclick="registrarMata('${fase.id}', ${idx})">Registrar</button>
                             `;
@@ -850,12 +932,16 @@
             
             const ranking = jogadorTimes.map(jt => {
                 const stats = estatisticas[jt.time] || { pontos: 0 };
-                return { jogador: jt.jogador, pontos: stats.pontos };
+                return { jogador: jt.jogador, pontos: stats.pontos, time: jt.time };
             }).sort((a, b) => b.pontos - a.pontos);
             
             let html = '';
             ranking.forEach((r, i) => {
-                html += `<div class="ranking-item"><span><strong>${i+1}º</strong> ${r.jogador}</span><span style="color:#00e676;">🏆 ${r.pontos} pts</span></div>`;
+                html += `<div class="ranking-item">
+                    <span><strong>${i+1}º</strong> ${r.jogador}</span>
+                    <span>⚽ ${r.time}</span>
+                    <span style="color:#00e676;">🏆 ${r.pontos} pts</span>
+                </div>`;
             });
             document.getElementById('rankingList').innerHTML = html;
             document.getElementById('rankingArea').style.display = 'block';
@@ -924,7 +1010,7 @@
             salvarTudo();
             renderizarGrupos();
             if (jogadorTimes.length > 0) renderizarRanking();
-            mostrarMensagem('Jogo registrado!');
+            mostrarMensagem('Jogo registrado e salvo!');
         };
 
         window.registrarMata = (fase, idx) => {
@@ -968,7 +1054,7 @@
             
             salvarTudo();
             renderizarMataMata();
-            mostrarMensagem('Resultado registrado!');
+            mostrarMensagem('Resultado registrado e salvo!');
         };
 
         // ==================== EVENTOS ====================
@@ -1019,7 +1105,8 @@
 
         document.getElementById('btnSortear').onclick = () => {
             if (!document.getElementById('chkSortear').checked) {
-                document.getElementById('resultadoSorteio').innerHTML = '<div class="tag">Sorteio pulado</div>';
+                document.getElementById('resultadoSorteio').style.display = 'block';
+                document.getElementById('resultadoSorteio').innerHTML = '<div class="sorteio-item">✅ Sorteio pulado. Nenhum time vinculado a jogadores.</div>';
                 document.getElementById('btnIniciarTorneio').disabled = false;
                 return;
             }
@@ -1038,14 +1125,20 @@
                 });
             }
             
-            let html = '<div style="margin-top: 10px;"><strong>Times sorteados:</strong></div>';
+            let html = '<div style="margin-bottom: 10px;"><strong>🎲 Times sorteados:</strong></div>';
             jogadorTimes.forEach(jt => {
-                html += `<div class="tag" style="margin: 5px;">👤 ${jt.jogador} → ⚽ ${jt.time}</div>`;
+                html += `
+                    <div class="sorteio-item">
+                        <span class="sorteio-jogador">👤 ${jt.jogador}</span>
+                        <span class="sorteio-time">⚽ ${jt.time}</span>
+                    </div>
+                `;
             });
+            document.getElementById('resultadoSorteio').style.display = 'block';
             document.getElementById('resultadoSorteio').innerHTML = html;
             document.getElementById('btnIniciarTorneio').disabled = false;
             salvarTudo();
-            mostrarMensagem('Sorteio realizado!');
+            mostrarMensagem('Sorteio realizado e salvo!');
         };
 
         document.getElementById('btnIniciarTorneio').onclick = () => {
@@ -1132,7 +1225,8 @@
         document.getElementById('btnExportar').onclick = () => {
             const dados = {
                 jogadores, timesSelecionados, timesPersonalizados, jogadorTimes,
-                grupos, chaves, estatisticas, torneioIniciado, faseAtual, campeao, historico
+                grupos, chaves, estatisticas, torneioIniciado, faseAtual, campeao, historico,
+                exportDate: new Date().toISOString()
             };
             const blob = new Blob([JSON.stringify(dados, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
@@ -1175,28 +1269,7 @@
 
         // Busca de times
         document.getElementById('buscaTime').oninput = function() {
-            const busca = this.value.toLowerCase();
-            const container = document.getElementById('listaTimes');
-            const times = timesSelecionados;
-            
-            if (times.length === 0) {
-                container.innerHTML = '<span style="color: #888;">Nenhum time selecionado</span>';
-                return;
-            }
-            
-            const filtrados = times.filter(time => time.toLowerCase().includes(busca));
-            
-            if (filtrados.length === 0) {
-                container.innerHTML = '<span style="color: #888;">Nenhum time encontrado</span>';
-                return;
-            }
-            
-            container.innerHTML = filtrados.map(time => `
-                <div class="time-card">
-                    <span>⚽ ${time}</span>
-                    <span class="tag-remove" onclick="removerTimeSelecionado('${time.replace(/'/g, "\\'")}')" style="margin-left: auto;">✕</span>
-                </div>
-            `).join('');
+            renderizarTimesSelecionados();
         };
 
         // Navegação entre abas
